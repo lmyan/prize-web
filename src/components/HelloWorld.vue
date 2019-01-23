@@ -1,48 +1,65 @@
 <template>
   <div class="hello">
+    <img src="@/assets/logo.png">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <el-table :data="list" @row-click="goPrize" highlight-current-row stripe v-loading="listLoading" style="width: 100%;" header-cell-class-name="table-header" border>
+      <el-table-column prop="roundName" label="名称"></el-table-column>
+      <el-table-column prop="usedCnt" label="已抽奖"></el-table-column>
+      <el-table-column prop="totalCnt" label="总奖品"></el-table-column>
+      <el-table-column label="抽奖率">
+        <template slot-scope="scope">
+          <el-progress :text-inside="true" :stroke-width="18" :percentage="scope.row.usedPercent"></el-progress>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="开始时间"></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data () {
+    return {
+      msg: '抽奖纪录',
+      listLoading: true,
+      list: []
+    }
+  },
+  methods: {
+    requestSummary () {
+      let param = {}
+      this.listLoading = true
+      this.$api.reqRoundInfoSummary(param).then(res => {
+        var dataList = res
+        for (var idx in dataList) {
+          var uPercent = Number((dataList[idx].usedCnt * 100) / dataList[idx].totalCnt).toFixed(2)
+          if (uPercent > 100) {
+            uPercent = 100
+          }
+          dataList[idx].usedPercent = uPercent
+        }
+        this.list = dataList
+        console.log('==>', this.list)
+        this.listLoading = false
+      })
+    },
+    goPrize (row) {
+      // console.log('go->', row)
+      console.log('go round->', row.roundId)
+      this.$router.push({name: 'detail', query: {roundId: row.roundId}})
+    }
+  },
+  mounted () {
+    this.requestSummary()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+h1, h2 {
+  font-weight: normal;
 }
 ul {
   list-style-type: none;
