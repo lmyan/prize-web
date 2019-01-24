@@ -1,23 +1,21 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 
-// let baseUrl = 'http://192.168.0.105:1120/'
-
+// 公司测试地址
 let baseUrl = 'http://10.10.10.70:1120/'
+// 生成环境地址
+// let baseUrl = 'http://pande.xin:1120/'
 
-let prodUrl = 'http://pande.xin:1120/'
-
-let env = process.env.NODE_ENV
-
-if (env === 'production') {
-  baseUrl = prodUrl
-}
+// 当前运行环境
+// let env = process.env.NODE_ENV
+// if (env === 'production') {
+// }
 
 // 创建 axios 实例
 // 这里 export  的原因是方便组件外使用 axios
 const Axios = axios.create({
   baseURL: baseUrl,
-  timeout: 600 * 1000 // 60s请求超时设置
+  timeout: 30000
 })
 
 // http request 拦截器
@@ -59,23 +57,23 @@ Axios.interceptors.response.use(
   })
 
 export default {
-  getBaseUrl() {
+  getBaseUrl () {
     return baseUrl
   },
 
-  get(url, params) {
+  get (url, params) {
     return Axios.get(url, { params: params })
   },
 
-  post(url, data) {
+  post (url, data) {
     return Axios.post(url, data)
   },
 
-  put(url, data) {
+  put (url, data) {
     return Axios.put(url, data)
   },
 
-  delete(url, params) {
+  delete (url, params) {
     return Axios.delete(url, { params: params })
   }
 }

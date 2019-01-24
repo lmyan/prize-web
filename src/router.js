@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import PrizeDetail from '@/components/PrizeDetail'
+import Prize from '@/views/Prize'
+import PrizeDetail from '@/views/PrizeDetail'
 
 Vue.use(Router)
 
@@ -9,12 +9,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'prize',
+      component: Prize
     },
     {
-      path: '/detail',
-      name: 'detail',
+      path: '/prize-detail',
+      name: 'prize-detail',
       component: PrizeDetail
     }
   ]
