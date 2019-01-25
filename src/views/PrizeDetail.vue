@@ -110,7 +110,7 @@ export default {
               } else {
                 arr[i].src = arr[i].getAttribute('data-src')
               }
-              arr[i].style.cssText = 'transition:opacity 4s;opacity:1;'
+              arr[i].style.cssText = 'transition:opacity 2s;opacity:1;'
             }
           }
           resolve()
