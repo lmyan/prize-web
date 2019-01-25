@@ -36,7 +36,7 @@ export default {
       secondList: [],
       thirdList: [],
       roundId: -1,
-      cardBodyStyle: { padding: '0px', height: '360px', width: '240px' }
+      cardBodyStyle: { padding: '0px', height: '300px', width: '240px' }
     }
   },
   methods: {
@@ -121,9 +121,10 @@ h2 {
 .imgCard {
   display: inline-block;
   position: relative;
-  width: 240px;
-  height: 360px;
   margin: 10px;
+}
+.imgCard img{
+  width: 100%;
 }
 .prizeInfo {
   position: absolute;
